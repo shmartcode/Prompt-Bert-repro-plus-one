@@ -5,6 +5,7 @@ GPU=0,1,2,3
 ES=125 # --eval_steps
 BMETRIC=stsb_spearman # --metric_for_best_model
 TRAIN_FILE=data/wiki1m_for_simcse.txt
+# TRAIN_FILE=data/wiki100k_for_simcse.txt
 
 if [[ $EXP == *"eval"* ]]; then
       EXP=`echo $EXP | sed s/eval-//`
@@ -80,6 +81,7 @@ case "$EXP" in
     TEMPLATE="*cls*_This_sentence_:_'_*sent_0*_'_means*mask*.*sep+*"
     TEMPLATE2="*cls*_The_sentence_:_'_*sent_0*_'_means*mask*.*sep+*"
     MODEL=roberta-base
+    
     args=(--mlp_only_train --mask_embedding_sentence\
           --mask_embedding_sentence_template $TEMPLATE\
           --mask_embedding_sentence_different_template $TEMPLATE2\
@@ -94,14 +96,22 @@ case "$EXP" in
     BATCH=256
     EPOCH=1
     LR=1e-5
-    EXP=${EXP}_s$2
+    # SHANECHANGE
+    # EXP=${EXP}_s$2
+    EXP=${EXP}_p${P:-0.0}_s$2 # to get different name results files for each p value
+    # END SHANECHANGE
     TEMPLATE="*cls*_This_sentence_of_\"*sent_0*\"_means*mask*.*sep+*"
     TEMPLATE2="*cls*_This_sentence_:_\"*sent_0*\"_means*mask*.*sep+*"
     MODEL=bert-base-uncased
+
+     # SHANECHANGE in args() below added --overwrite_cache so that word dropout for the sentences takes effect
+     # SHANECHANGE in args() below added word_dropout_prob
     args=(--mlp_only_train --mask_embedding_sentence\
           --mask_embedding_sentence_template $TEMPLATE\
           --mask_embedding_sentence_different_template $TEMPLATE2\
           --mask_embedding_sentence_delta\
+          --overwrite_cache\
+          --word_dropout_prob ${P:-0.0}\
           --seed $2 )
     eargs=(--mask_embedding_sentence \
            --mask_embedding_sentence_template $TEMPLATE )

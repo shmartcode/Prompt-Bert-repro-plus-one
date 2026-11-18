@@ -38,6 +38,20 @@ from transformers.file_utils import cached_property, torch_required, is_torch_av
 from prompt_bert.models import RobertaForCL, BertForCL
 from prompt_bert.trainers import CLTrainer
 
+# SHANECHANGE to remove future warning in terminal output due to running on older versions of packages
+import warnings
+from transformers import logging as hf_logging
+
+# 1. Mute Python-level FutureWarnings and UserWarnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+
+# 2. Silence Hugging Face internal library warnings (keeps errors/info intact)
+hf_logging.set_verbosity_error()
+# ----------------------------------
+
+# END SHANECHANGE
+
 logger = logging.getLogger(__name__)
 MODEL_CONFIG_CLASSES = list(MODEL_FOR_MASKED_LM_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
@@ -374,6 +388,13 @@ class DataTrainingArguments:
         default=0.15, 
         metadata={"help": "Ratio of tokens to mask for MLM (only effective if --do_mlm)"}
     )
+    # SHANECHANGE
+    word_dropout_prob: float = field(
+        default=0.0,
+        metadata={"help": "Probability of dropping each word in view 2 (0 = baseline)"}
+    )
+    # END SHANECHANGE
+
     def __post_init__(self):
         if self.dataset_name is None and self.train_file is None and self.validation_file is None:
             raise ValueError("Need either a dataset name or a training/validation file.")
@@ -643,6 +664,19 @@ def main():
         #mask_embedding_sentence_es_tokens = tokenizer.encode(model_args.mask_embedding_sentence_es, add_special_tokens=False)
 
 
+    # SHANECHANGE
+    def word_dropout(sent, p=0.0, min_words=4):
+        # adding dropout for the sentence in one of the views/templates
+        if p <= 0:
+            return sent
+        words = sent.split()
+        if len(words) < min_words:
+            return sent
+        kept = [w for w in words if random.random() > p]
+        return " ".join(kept) if kept else sent
+
+    # END SHANECHANGE
+
     def prepare_features(examples):
         # padding = longest (default)
         #   If no sentence in the batch exceed the max length, then use
@@ -686,6 +720,7 @@ def main():
                     s = tokenizer.encode(s, add_special_tokens=False)[:data_args.max_seq_length]
                     sent_features['input_ids'].append(bs+s+es)
                 elif i < 2*total:
+                    s = word_dropout(s, p=data_args.word_dropout_prob)   # SHANECHANGE
                     s = tokenizer.encode(s, add_special_tokens=False)[:data_args.max_seq_length]
                     sent_features['input_ids'].append(bs2+s+es2)
                 else:
