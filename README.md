@@ -24,7 +24,7 @@ All Δ values are relative to the 5-seed baseline mean (77.87). Rows with 3 seed
 
 ## How to reproduce
 Follow the original repo's readme instructions further below and then:
-Baseline: `P=0.0`. 
+Baseline: `P=0.0`.
 Training data: the first 100,000 lines of `wiki1m_for_simcse.txt`
 ```bash
 head -n 100000 wiki1m_for_simcse.txt > wiki100k_for_simcse.txt
