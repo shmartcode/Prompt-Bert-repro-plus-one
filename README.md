@@ -23,14 +23,12 @@ Original Paper
 All Δ values are relative to the 5-seed baseline mean (77.87). Rows with 3 seeds ran seeds 0 to 2 only.
 
 ## How to reproduce
-Follow the original repo instructions below and then:
-```bash
-P=0.05 ./run.sh unsup-bert 0 0   # p=0.05, seed 0, GPU 0
-```
+Follow the original repo's readme instructions further below and then:
 Baseline: `P=0.0`. 
 Training data: the first 100,000 lines of `wiki1m_for_simcse.txt`
 ```bash
 head -n 100000 wiki1m_for_simcse.txt > wiki100k_for_simcse.txt
+P=0.05 ./run.sh unsup-bert 0 0   # p=0.05, seed 0, GPU 0
 ```
 ## Limitations
 - 100k sentences only (full-data run pending or single-seed), one template pair, BERT-base
