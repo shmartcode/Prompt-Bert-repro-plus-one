@@ -1,3 +1,42 @@
+# PromptBERT: Word Dropout Extension (fork)
+
+This is a fork of [princeton-nlp/PromptBERT](<link to the original repo>) with an added
+augmentation experiment. The original README follows below the divider.
+
+## What I changed
+- Added word deletion on one view of each training pair (`--word_dropout_prob`, default 0.0 = original behavior)
+- Edits are in `train.py` (flag + helper, marked `SHANECHANGE`) and `run.sh` (flag passthrough, `--overwrite_cache`)
+- Trained on a 100k-sentence subset of the 1M training file, 1 epoch, BERT-base
+
+## Results (100k subset, Avg. STS, mean ± std over seeds)
+| p | Avg. | Δ vs baseline | Seeds |
+|---|---|---|---|
+| 0.0 (baseline) | 77.87 ± 0.18 | n/a | 5 |
+| 0.05 | 78.25 ± 0.17 | +0.37 (paired t-test p = 0.013, uncorrected) | 5 |
+| 0.1 | 78.23 ± 0.26 | +0.29 | 3 |
+| 0.2 | 77.32 ± 0.18 | -0.55 | 3 |
+| 0.3 | 76.15 ± 0.31 | -1.72 | 3 |
+
+All Δ values are relative to the 5-seed baseline mean (77.87). Rows with 3 seeds ran seeds 0 to 2 only.
+
+## How to reproduce
+```bash
+P=0.05 ./run.sh unsup-bert 0 0   # p=0.05, seed 0, GPU 0
+```
+Baseline: `P=0.0`. Training data: first 100,000 lines of `wiki1m_for_simcse.txt`
+Training data: the first 100,000 lines of `wiki1m_for_simcse.txt`
+(`head -n 100000 wiki1m_for_simcse.txt > wiki100k_for_simcse.txt`).
+
+## Limitations
+- 100k sentences only (full-data run pending or single-seed), one template pair, BERT-base
+- p chosen by sweeping on the same test numbers; several p values tried
+- Per-task gains not reliable; only the Avg. column is claimed
+
+## Other experiments
+- Mean-pooling the last 3 layers: 76.26 (single seed), worse than baseline
+
+
+# Original PromptBERT paper's readme:
 # PromptBERT: Prompt makes BERT Better at Sentence Embeddings
 
 Update: We have extended our prompt-based method to LLMs in [scaling_sentemb](https://github.com/kongds/scaling_sentemb). [2023/08/01]
