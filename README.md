@@ -3,6 +3,9 @@
 This is a fork of [princeton-nlp/PromptBERT](<link to the original repo>) with an added
 augmentation experiment. The original README follows below the divider.
 
+Original Paper
+[PromptBERT: Improving BERT Sentence Embeddings with Prompts](https://aclanthology.org/2022.emnlp-main.603/) (Jiang et al., EMNLP 2022)
+
 ## What I changed
 - Added word deletion on one view of each training pair (`--word_dropout_prob`, default 0.0 = original behavior)
 - Edits are in `train.py` (flag + helper, marked `SHANECHANGE`) and `run.sh` (flag passthrough, `--overwrite_cache`)
@@ -34,6 +37,40 @@ Training data: the first 100,000 lines of `wiki1m_for_simcse.txt`
 
 ## Other experiments
 - Mean-pooling the last 3 layers: 76.26 (single seed), worse than baseline
+
+
+## Citation
+
+If you use this work, please cite the original paper:
+
+```bibtex
+@inproceedings{jiang-etal-2022-promptbert,
+    title = "{P}rompt{BERT}: Improving {BERT} Sentence Embeddings with Prompts",
+    author = "Jiang, Ting  and
+      Jiao, Jian  and
+      Huang, Shaohan  and
+      Zhang, Zihan  and
+      Wang, Deqing  and
+      Zhuang, Fuzhen  and
+      Wei, Furu  and
+      Huang, Haizhen  and
+      Deng, Denvy  and
+      Zhang, Qi",
+    editor = "Goldberg, Yoav  and
+      Kozareva, Zornitsa  and
+      Zhang, Yue",
+    booktitle = "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    month = dec,
+    year = "2022",
+    address = "Abu Dhabi, United Arab Emirates",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.emnlp-main.603/",
+    doi = "10.18653/v1/2022.emnlp-main.603",
+    pages = "8826--8837",
+    abstract = "We propose PromptBERT, a novel contrastive learning method for learning better sentence representation. We firstly analysis the drawback of current sentence embedding from original BERT and find that it is mainly due to the static token embedding bias and ineffective BERT layers. Then we propose the first prompt-based sentence embeddings method and discuss two prompt representing methods and three prompt searching methods to make BERT achieve better sentence embeddings .Moreover, we propose a novel unsupervised training objective by the technology of template denoising, which substantially shortens the performance gap between the supervised and unsupervised settings. Extensive experiments show the effectiveness of our method. Compared to SimCSE, PromptBert achieves 2.29 and 2.58 points of improvement based on BERT and RoBERTa in the unsupervised setting."
+}
+```
+
 
 
 # Original PromptBERT paper's readme:
