@@ -23,6 +23,7 @@ Original Paper
 All Δ values are relative to the 5-seed baseline mean (77.87). Rows with 3 seeds ran seeds 0 to 2 only.
 
 ## How to reproduce
+Follow the original repo instructions below and then:
 ```bash
 P=0.05 ./run.sh unsup-bert 0 0   # p=0.05, seed 0, GPU 0
 ```
