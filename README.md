@@ -1,6 +1,6 @@
 # PromptBERT: Word Dropout Extension (fork)
 
-This is a fork of [princeton-nlp/PromptBERT](<link to the original repo>) with an added
+This is a fork of [princeton-nlp/PromptBERT](https://github.com/kongds/Prompt-BERT.git) with an added
 augmentation experiment. The original README follows below the divider.
 
 Original Paper
