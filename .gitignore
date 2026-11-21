@@ -3,5 +3,7 @@ runs/
 data/*
 !data/download_wiki.sh
 .venv/
-*k.log
+*.log
 __pycache__/
+SentEval/data/*
+!SentEval/data/download_dataset.sh
