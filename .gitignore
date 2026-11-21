@@ -1,6 +1,7 @@
 result/
 runs/
-data/text/
+data/*
+!data/download_wiki.sh
 .venv/
-*.log
+*k.log
 __pycache__/
